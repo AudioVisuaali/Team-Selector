@@ -23,7 +23,8 @@ s.on('connection', function(ws){
     // RE ROLL
     if(message.startsWith("RR")) {
       shuffle(users);
-      teams = [[], [], [], [], [], []]
+      teams = [[], [], [], [], [], []];
+      current_team = 0;
       for (i = 0; i < users.length; i++) {
         if(current_team == teams_amount) {
           current_team = 0;
@@ -37,9 +38,13 @@ s.on('connection', function(ws){
     // NEW USER
     if(message.startsWith("NU")) {
       var letter = message.substring(2);
+
+
+
       if(checkInput(letter)) {
         users.push(letter);
         users_list_send_all(users);
+        //ws.send("NU" + input);
       }
     }
 
@@ -111,14 +116,12 @@ function checkInput(input) {
   for (i = 0; i < users.length; i++) {
     if(users[i].toLowerCase() == input.toLowerCase()) {
       return false;
-    } else{
-      return true;
-    }
-  }
+    }}
 
   // If empty
   if(input.trim() !== ""){
-    sock.send("NU" + input);
-    reset_text();
+    return true;
+  } else {
+    return false;
   }
 }
